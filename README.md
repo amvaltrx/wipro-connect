@@ -19,7 +19,7 @@ Built with **Node.js**, **Discord.js v14**, and **@whiskeysockets/baileys**.
 
 ### 💬 3. Full Two-Way WhatsApp Messaging
 * **Send Outbound Messages**: `/whatsapp send to:<number/group> message:<text>` or via one-click **`[ 📤 Send Message ]`** modal UI.
-* **Native Discord In-Thread Replies**: When a WhatsApp contact messages you, hover over the message embed in Discord, click **Reply (`↩️`)**, and type your reply. The bot pipes it straight to WhatsApp and adds a `✅` reaction to confirm delivery.
+* **Native Discord In-Thread Replies**: When a WhatsApp contact messages you, hover over the message embed in Discord, click **Reply (`↩️`)**, and type your reply. The bot pipes it straight to WhatsApp and marks the message with a `✅` to confirm delivery.
 * **Message Revocation ("Delete for Everyone")**: `/whatsapp delete message_id:<id>` revokes sent messages for all recipients.
 
 ### 📇 4. Contacts & Aliases
@@ -39,22 +39,55 @@ Built with **Node.js**, **Discord.js v14**, and **@whiskeysockets/baileys**.
 
 ```
 wipro-connect/
-├── commands/
-│   ├── close.js           # Closes & deletes current terminal thread
-│   ├── info.js            # Displays system uptime & metrics
-│   ├── ping.js            # Gateway latency & roundtrip response
-│   └── whatsapp.js        # Core WhatsApp command suite & subcommands
-├── utils/
-│   ├── config.js          # Environment variables & constants
-│   ├── embeds.js          # Branded Discord embeds & UI components
-│   ├── storage.js         # Local database for terminals, aliases, & message refs
-│   └── whatsappManager.js # Baileys Multi-Device socket session manager
-├── .env.example           # Environment template
-├── .gitignore             # Git ignore patterns
-├── deploy-commands.js     # Slash command registry script
-├── index.js               # Main Discord gateway entry point
-├── package.json           # Project manifest & dependencies
-└── README.md              # Project documentation
+├── src/
+│   ├── commands/
+│   │   ├── general/
+│   │   │   ├── info.js
+│   │   │   └── ping.js
+│   │   └── whatsapp/
+│   │       ├── subcommands/
+│   │       │   ├── login.js
+│   │       │   ├── send.js
+│   │       │   ├── delete.js
+│   │       │   ├── contacts.js
+│   │       │   ├── search.js
+│   │       │   ├── name.js
+│   │       │   ├── status.js
+│   │       │   ├── logout.js
+│   │       │   ├── close.js
+│   │       │   └── setup.js
+│   │       ├── close.js       # Top-level /close shortcut
+│   │       └── index.js       # Master /whatsapp command router
+│   ├── events/
+│   │   ├── interactionCreate.js
+│   │   ├── messageCreate.js
+│   │   └── ready.js
+│   ├── handlers/
+│   │   ├── buttonHandler.js
+│   │   ├── commandHandler.js
+│   │   └── modalHandler.js
+│   ├── services/
+│   │   ├── messageRouter.js   # Inbound & outbound routing
+│   │   └── sessionManager.js  # Baileys Multi-Device socket manager
+│   ├── ui/
+│   │   ├── buttons.js
+│   │   ├── embeds.js
+│   │   └── modals.js
+│   ├── utils/
+│   │   ├── formatters.js      # Phone, JID, and uptime helpers
+│   │   ├── logger.js          # Timestamped console logger
+│   │   └── storage.js         # Debounced JSON database
+│   ├── config.js
+│   └── index.js               # Entry point
+├── scripts/
+│   ├── deploy-commands.js     # Register slash commands
+│   └── clear-commands.js      # Wipe slash commands (utility)
+├── .env.example
+├── .gitignore
+├── .prettierrc
+├── nodemon.json
+├── package.json
+└── README.md
 ```
 
 ---
@@ -98,6 +131,10 @@ npm run deploy
 
 ### 5. Start the Bot
 ```bash
+# Development (with auto-restart via nodemon)
+npm run dev
+
+# Production
 npm start
 ```
 
@@ -135,7 +172,7 @@ npm start
 ### Option B: VPS (Ubuntu / Debian with PM2)
 ```bash
 npm install -g pm2
-pm2 start index.js --name "wipro-connect"
+pm2 start src/index.js --name "wipro-connect"
 pm2 save
 pm2 startup
 ```
