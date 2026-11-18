@@ -6,16 +6,21 @@ export default {
     .setDescription('Check bot latency and gateway responsiveness'),
 
   async execute(interaction) {
-    const sent = await interaction.reply({ content: '🏓 Pinging gateway...', fetchReply: true, ephemeral: true });
+    const sent = await interaction.reply({
+      content: '🏓 Pinging gateway...',
+      fetchReply: true,
+      ephemeral: true,
+    });
+
     const latency = sent.createdTimestamp - interaction.createdTimestamp;
-    const apiPing = Math.round(interaction.client.ws.ping);
+    const wsPing = Math.round(interaction.client.ws.ping);
 
     const embed = new EmbedBuilder()
       .setColor(0x25D366)
       .setTitle('🏓 Pong!')
       .addFields(
         { name: '⚡ Roundtrip Latency', value: `\`${latency}ms\``, inline: true },
-        { name: '🌐 Discord API Ping', value: `\`${apiPing}ms\``, inline: true }
+        { name: '🌐 Discord Gateway Ping', value: `\`${wsPing}ms\``, inline: true }
       )
       .setTimestamp();
 

@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
-import { whatsappManager } from '../utils/whatsappManager.js';
+import { sessionManager } from '../../services/sessionManager.js';
 
 export default {
   data: new SlashCommandBuilder()
@@ -7,10 +7,10 @@ export default {
     .setDescription('Display bot system information, uptime and operational metrics'),
 
   async execute(interaction) {
-    const activeCount = whatsappManager.activeSessions.size;
-    const uptime = Math.floor(process.uptime());
-    const hours = Math.floor(uptime / 3600);
-    const minutes = Math.floor((uptime % 3600) / 60);
+    const activeCount = sessionManager.activeSessions.size;
+    const uptimeSec = Math.floor(process.uptime());
+    const hours = Math.floor(uptimeSec / 3600);
+    const mins = Math.floor((uptimeSec % 3600) / 60);
 
     const embed = new EmbedBuilder()
       .setColor(0x00A884)
@@ -18,10 +18,10 @@ export default {
       .setDescription('Enterprise Discord-to-WhatsApp encrypted communication hub.')
       .addFields(
         { name: '🤖 Bot Name', value: 'Wipro Connect', inline: true },
-        { name: '🟢 Active WhatsApp Sessions', value: `\`${activeCount}\``, inline: true },
-        { name: '⏱️ Bot Process Uptime', value: `\`${hours}h ${minutes}m\``, inline: true },
-        { name: '📦 Node.js Version', value: `\`${process.version}\``, inline: true },
-        { name: '🛡️ Encryption', value: '`End-to-End Multi-Device`', inline: true }
+        { name: '🟢 Active Sessions', value: `\`${activeCount}\``, inline: true },
+        { name: '⏱️ Uptime', value: `\`${hours}h ${mins}m\``, inline: true },
+        { name: '📦 Node Version', value: `\`${process.version}\``, inline: true },
+        { name: '🔒 Security', value: '`End-to-End Encrypted`', inline: true }
       )
       .setFooter({ text: 'Wipro Connect Gateway' })
       .setTimestamp();
