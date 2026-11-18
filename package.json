@@ -2,11 +2,13 @@
   "name": "wipro-connect",
   "version": "1.0.0",
   "description": "Enterprise Discord-to-WhatsApp encrypted bridge bot with private interactive terminal threads.",
-  "main": "index.js",
+  "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "deploy": "node deploy-commands.js"
+    "start": "node src/index.js",
+    "dev": "nodemon",
+    "deploy": "node scripts/deploy-commands.js",
+    "clear:commands": "node scripts/clear-commands.js"
   },
   "keywords": [
     "discord-bot",
@@ -25,5 +27,8 @@
     "dotenv": "^16.4.5",
     "pino": "^9.5.0",
     "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
   }
 }
